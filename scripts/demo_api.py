@@ -367,6 +367,7 @@ def predit():
     input_img = request.get_json(silent=True)
     container_name = input_img['containerName']
     blob_name = input_img['blobName']
+    print(container_name + "  " + blob_name)
     img = download_img(container_name, blob_name)
     # im_name = args.inputimg    # the path to the target image
     # cv2.imread(im_name)
