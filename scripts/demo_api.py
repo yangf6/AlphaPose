@@ -23,7 +23,11 @@ from alphapose.models import builder
 from alphapose.utils.config import update_config
 from detector.apis import get_detector
 from alphapose.utils.vis import getTime
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient,__version__
 
+app = Flask(__name__)
+demo = None
 """----------------------------- Demo options -----------------------------"""
 parser = argparse.ArgumentParser(description='AlphaPose Single-Image Demo')
 parser.add_argument('--cfg', type=str, required=True,
@@ -340,26 +344,34 @@ class SingleImageAlphaPose():
         write_json(final_result, outputpath, form=form, for_eval=for_eval)
         print("Results have been written to json.")
 
-def example():
-    outputpath = "examples/res/"
-    if not os.path.exists(outputpath + '/vis'):
-        os.mkdir(outputpath + '/vis')
+def load_model():
+    return SingleImageAlphaPose(args, cfg)
 
-    demo = SingleImageAlphaPose(args, cfg)
-    im_name = args.inputimg    # the path to the target image
-    image = cv2.cvtColor(cv2.imread(im_name), cv2.COLOR_BGR2RGB)
-    pose = demo.process(im_name, image)
-    img = demo.getImg()     # or you can just use: img = cv2.imread(image)
-    img = demo.vis(img, pose)   # visulize the pose result
-    cv2.imwrite(os.path.join(outputpath, 'vis', os.path.basename(im_name)), img)
-    
-    # if you want to vis the img:
-    # cv2.imshow("AlphaPose Demo", img)
-    # cv2.waitKey(30)
+def download_img(container_name, blob_name):
+    try:
+        print("Azure Blob Storage v" + __version__ + " - Python quickstart sample")
+        connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+        blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+        # Create a blob client using the local file name as the name for the blob
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+        return blob_client.download_blob()
+    except Exception as ex:
+        print('Exception:')
+        print(ex)
+        return ex
 
-    # write the result to json:
-    result = [pose]
-    demo.writeJson(result, outputpath, form=args.format, for_eval=args.eval)
+@app.route('/predict', methods=['POST'])
+def predit():
+    input_img = request.get_json(silent=True)
+    container_name = input_img['containerName']
+    blob_name = input_img['blobName']
+    img = download_img(container_name, blob_name)
+    # im_name = args.inputimg    # the path to the target image
+    # cv2.imread(im_name)
+    image = cv2.cvtColor(img.readall(), cv2.COLOR_BGR2RGB)
+    pose = demo.process(blob_name, image)
+    return pose
 
-if __name__ == "__main__":
-    example()
+if __name__ == '__main__':
+    demo = load_model()
+    app.run(port=8080)
