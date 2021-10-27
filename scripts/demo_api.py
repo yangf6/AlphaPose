@@ -81,8 +81,10 @@ class DetectionLoader():
     def process(self, im_name, image):
         # start to pre process images for object detection
         self.image_preprocess(im_name, image)
+        print('image_preprocess')
         # start to detect human in images
         self.image_detection()
+        print('image_detection')
         # start to post process cropped human image for pose estimation
         self.image_postprocess()
         return self
