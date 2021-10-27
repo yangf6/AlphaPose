@@ -347,8 +347,11 @@ def predit():
     # im_name = args.inputimg    # the path to the target image
     # cv2.imread(im_name)
     image = cv2.cvtColor(img.readall(), cv2.COLOR_BGR2RGB)
-    # pose = demo.process(blob_name, image)
+    pose = demo.process(blob_name, image)
     return pose
 
-demo = load_model()
+if __name__ == '__main__':
+     demo = load_model()
+     app.run(port=8080)
+
 
