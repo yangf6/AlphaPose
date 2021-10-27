@@ -354,10 +354,15 @@ def predit():
         img = download_img(container_name, blob_name)
         # im_name = args.inputimg    # the path to the target image
         # cv2.imread(im_name)
-        arr = blob_to_array(img.readall())
-        image = cv2.cvtColor(arr, cv2.COLOR_BGR2RGB)
-        pose = demo.process(blob_name, image)
-        return pose
+        img_content = img.readall()
+        print(type(img_content))
+        print(img_content)
+        arr = blob_to_array()
+        print(type(arr))
+        print(arr)
+        # image = cv2.cvtColor(arr, cv2.COLOR_BGR2RGB)
+        # pose = demo.process(blob_name, image)
+        # return pose
     except Exception as err:
         print(err)
         return 'unable to process img'
