@@ -267,6 +267,7 @@ class SingleImageAlphaPose():
                         ckpt_time, pose_time = getTime(ckpt_time)
                         runtime_profile['pt'].append(pose_time)
                     pose = self.writer.start()
+                    print("get called 270")
                     if profile:
                         ckpt_time, post_time = getTime(ckpt_time)
                         runtime_profile['pn'].append(post_time)
@@ -288,6 +289,7 @@ class SingleImageAlphaPose():
                     hm = hm.cpu()
                     self.writer.save(boxes, scores, ids, hm, cropped_boxes, orig_img, im_name)
                     pose = self.writer.start()
+                    print("get called 292")
                     if profile:
                         ckpt_time, post_time = getTime(ckpt_time)
                         runtime_profile['pn'].append(post_time)
@@ -304,7 +306,7 @@ class SingleImageAlphaPose():
             pass
         except KeyboardInterrupt:
             print('===========================> Finish Model Running.')
-
+        print("get called 309")
         return pose
 
     def getImg(self):
