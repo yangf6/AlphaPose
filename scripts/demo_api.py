@@ -39,7 +39,7 @@ profile = False
 default_format = None
 default_min_box_area = 0
 default_eval = False
-defaul_gpus = 0
+defaul_gpus = "0"
 default_flip = False
 default_debug = False
 default_vis_fast = False
@@ -350,6 +350,5 @@ def predit():
     pose = demo.process(blob_name, image)
     return pose
 
-if __name__ == '__main__':
-    demo = load_model()
-    app.run(port=8080)
+demo = load_model()
+
