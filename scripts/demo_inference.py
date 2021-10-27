@@ -95,6 +95,8 @@ args.detbatch = args.detbatch * len(args.gpus)
 args.posebatch = args.posebatch * len(args.gpus)
 args.tracking = args.pose_track or args.pose_flow or args.detector=='tracker'
 
+print("gpus" + str(args.gpus))
+print("device" + str(args.device))
 if not args.sp:
     torch.multiprocessing.set_start_method('forkserver', force=True)
     torch.multiprocessing.set_sharing_strategy('file_system')
