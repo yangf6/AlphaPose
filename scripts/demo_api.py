@@ -57,7 +57,7 @@ device = torch.device("cuda:" + str(gpus[0]) if gpus[0] >= 0 else "cpu")
 print("cuda:" + str(gpus[0]) if gpus[0] >= 0 else "cpu")
 tracking = defaul_pose_track or default_pose_flow or default_detector=='tracker'
 
-class args(gpus, device):
+class args():
     def __init__(self, gpus, device):
         self.gpus=gpus
         self.device=device
