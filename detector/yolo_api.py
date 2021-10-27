@@ -43,7 +43,7 @@ class YOLODetector(BaseDetector):
 
     def load_model(self):
         args = self.detector_opt
-        args.gpus = [-1]
+        gpus = [-1]
         print('Loading YOLO model..')
         self.model = Darknet(self.model_cfg)
         self.model.load_weights(self.model_weights)
@@ -51,11 +51,11 @@ class YOLODetector(BaseDetector):
         
 
         if args:
-            if len(args.gpus) > 1 and args.gpus[0] >= 1:
-                self.model = torch.nn.DataParallel(self.model, device_ids=args.gpus).to(args.device)
+            if len(gpus) > 1 and gpus[0] >= 1:
+                self.model = torch.nn.DataParallel(self.model, device_ids=gpus).to(args.device)
             else:
                 print("yolo to cpu")
-                self.model.to(args.device)
+                self.model.to('cpu')
         else:
             self.model.cuda()
         self.model.eval()
@@ -84,10 +84,10 @@ class YOLODetector(BaseDetector):
         Output: dets(torch.cuda.FloatTensor,(n,(batch_idx,x1,y1,x2,y2,c,s,idx of cls))): human detection results
         """
         args = self.detector_opt
-        args.gpus = [-1]
+        gpus = [-1]
         _CUDA = True
         if args:
-            if args.gpus[0] < 0:
+            if gpus[0] < 0:
                 print('disable cuda')
                 _CUDA = False
         if not self.model:
@@ -248,10 +248,10 @@ class YOLODetector(BaseDetector):
         instead of coco %012d id for generalization. 
         """
         args = self.detector_opt
-        args.gpus = [-1]
+        gpus = [-1]
         _CUDA = True
         if args:
-            if args.gpus[0] < 0:
+            if gpus[0] < 0:
                 print('disable cuda on detect img')
                 _CUDA = False
         if not self.model:

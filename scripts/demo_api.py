@@ -114,6 +114,7 @@ class DetectionLoader():
             return
 
         with torch.no_grad():
+            print("117")
             dets = self.detector.images_detection(imgs, im_dim_list)
             print("load dets")
             if isinstance(dets, int) or dets.shape[0] == 0:
