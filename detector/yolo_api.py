@@ -43,7 +43,7 @@ class YOLODetector(BaseDetector):
 
     def load_model(self):
         args = self.detector_opt
-
+        print(type(args))
         print('Loading YOLO model..')
         self.model = Darknet(self.model_cfg)
         self.model.load_weights(self.model_weights)
