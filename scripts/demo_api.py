@@ -27,7 +27,8 @@ from flask import Flask, request, render_template, redirect, url_for, send_from_
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient,__version__
 
 app = Flask(__name__)
-demo = None
+demo = load_model()
+
 default_config = "configs/halpe_26/resnet/256x192_res50_lr1e-3_1x.yaml"
 default_model = "pretrained_models/halpe26_fast_res50_256x192.pth"
 default_detector = "yolo"
@@ -350,8 +351,5 @@ def predit():
     pose = demo.process(blob_name, image)
     return pose
 
-if __name__ == '__main__':
-     demo = load_model()
-     app.run()
 
 
