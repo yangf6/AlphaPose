@@ -346,17 +346,21 @@ def blob_to_array(blob):
 @app.route('/predict', methods=['POST'])
 def predit():
     print("get called")
-    input_img = request.get_json(silent=True)
-    container_name = input_img['containerName']
-    blob_name = input_img['blobName']
-    print(container_name + "  " + blob_name)
-    img = download_img(container_name, blob_name)
-    # im_name = args.inputimg    # the path to the target image
-    # cv2.imread(im_name)
-    arr = blob_to_array(img.readall())
-    image = cv2.cvtColor(arr, cv2.COLOR_BGR2RGB)
-    pose = demo.process(blob_name, image)
-    return pose
+    try:
+        input_img = request.get_json(silent=True)
+        container_name = input_img['containerName']
+        blob_name = input_img['blobName']
+        print(container_name + "  " + blob_name)
+        img = download_img(container_name, blob_name)
+        # im_name = args.inputimg    # the path to the target image
+        # cv2.imread(im_name)
+        arr = blob_to_array(img.readall())
+        image = cv2.cvtColor(arr, cv2.COLOR_BGR2RGB)
+        pose = demo.process(blob_name, image)
+        return pose
+    except Exception as err:
+        print(err)
+        return 'unable to process img'
 
 
 
