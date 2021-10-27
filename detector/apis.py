@@ -12,7 +12,7 @@ def get_detector(opt='None'):
         from detector.yolo_api import YOLODetector
         from detector.yolo_cfg import cfg
         return YOLODetector(cfg, opt)
-    if opt.detector == 'yolo':
+    elif opt.detector == 'yolo':
         from detector.yolo_api import YOLODetector
         from detector.yolo_cfg import cfg
         return YOLODetector(cfg, opt)
