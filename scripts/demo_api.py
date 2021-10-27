@@ -356,7 +356,7 @@ def predit():
         # cv2.imread(im_name)
         img_content = img.readall()
         print(type(img_content))
-        arr = blob_to_array(blob)
+        arr = blob_to_array(img_content)
         print(type(arr))
         print(arr)
         # image = cv2.cvtColor(arr, cv2.COLOR_BGR2RGB)
