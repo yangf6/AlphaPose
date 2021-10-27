@@ -361,7 +361,7 @@ def predit():
         arr = blob_to_array(img_content)
         print(type(arr))
         print(arr)
-        image = cv2.cvtColor(arr, cv2.COLOR_BGR2RGB)
+        image = cv2.cvtColor(bytearray(img_content), cv2.COLOR_BGR2RGB)
         pose = demo.process(blob_name, image)
         return str(pose)
     except Exception as err:
