@@ -54,6 +54,7 @@ class YOLODetector(BaseDetector):
             if len(args.gpus) > 1 and args.gpus[0] >= 1:
                 self.model = torch.nn.DataParallel(self.model, device_ids=args.gpus).to(args.device)
             else:
+                print("yolo to cpu")
                 self.model.to(args.device)
         else:
             self.model.cuda()
@@ -87,6 +88,7 @@ class YOLODetector(BaseDetector):
         _CUDA = True
         if args:
             if args.gpus[0] < 0:
+                print('disable cuda')
                 _CUDA = False
         if not self.model:
             self.load_model()
@@ -250,6 +252,7 @@ class YOLODetector(BaseDetector):
         _CUDA = True
         if args:
             if args.gpus[0] < 0:
+                print('disable cuda on detect img')
                 _CUDA = False
         if not self.model:
             self.load_model()
