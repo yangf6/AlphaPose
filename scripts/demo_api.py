@@ -357,7 +357,8 @@ def predit():
         # im_name = args.inputimg    # the path to the target image
         # cv2.imread(im_name)
         img_content = img.readall()
-        cv2_img = cv2.imread(img_content)
+        x = np.fromstring(img_content, dtype='uint8')
+        cv2_img = cv2.imdecode(x, cv2.IMREAD_UNCHANGED)
         image = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2RGB)
         pose = demo.process(blob_name, image)
         return str(pose)
