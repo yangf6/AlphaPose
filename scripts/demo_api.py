@@ -48,58 +48,18 @@ defaul_pose_track = False
 default_config = "configs/halpe_26/resnet/256x192_res50_lr1e-3_1x.yaml"
 default_model = "pretrained_models/halpe26_fast_res50_256x192.pth"
 
-"""----------------------------- Demo options -----------------------------"""
-parser = argparse.ArgumentParser(description='AlphaPose Demo')
-parser.add_argument('--cfg', type=str, required=False,default=default_config,
-                    help='experiment configure file name')
-parser.add_argument('--checkpoint', type=str, required=False, default=default_model,
-                    help='checkpoint file name')
-parser.add_argument('--detector', dest='detector',
-                    help='detector name', default="yolo")
-parser.add_argument('--image', dest='inputimg',
-                    help='image-name', default="")
-parser.add_argument('--save_img', default=False, action='store_true',
-                    help='save result as image')
-parser.add_argument('--vis', default=False, action='store_true',
-                    help='visualize image')
-parser.add_argument('--showbox', default=False, action='store_true',
-                    help='visualize human bbox')
-parser.add_argument('--profile', default=False, action='store_true',
-                    help='add speed profiling at screen output')
-parser.add_argument('--format', type=str,
-                    help='save in the format of cmu or coco or openpose, option: coco/cmu/open')
-parser.add_argument('--min_box_area', type=int, default=0,
-                    help='min box area to filter out')
-parser.add_argument('--eval', dest='eval', default=False, action='store_true',
-                    help='save the result json as coco format, using image index(int) instead of image name(str)')
-parser.add_argument('--gpus', type=str, dest='gpus', default="0",
-                    help='choose which cuda device to use by index and input comma to use multi gpus, e.g. 0,1,2,3. (input -1 for cpu only)')
-parser.add_argument('--flip', default=False, action='store_true',
-                    help='enable flip testing')
-parser.add_argument('--debug', default=False, action='store_true',
-                    help='print detail information')
-parser.add_argument('--vis_fast', dest='vis_fast',
-                    help='use fast rendering', action='store_true', default=False)
-parser.add_argument('--host')
-parser.add_argument('--port')
-"""----------------------------- Tracking options -----------------------------"""
-parser.add_argument('--pose_flow', dest='pose_flow',
-                    help='track humans in video with PoseFlow', action='store_true', default=False)
-parser.add_argument('--pose_track', dest='pose_track',
-                    help='track humans in video with reid', action='store_true', default=False)
-
-args = parser.parse_args()
 
 cfg = update_config(default_config)
 
-args.gpus = [int(i) for i in args.gpus.split(',')] if torch.cuda.device_count() >= 1 else [-1]
 gpus = [int(i) for i in defaul_gpus.split(',')] if torch.cuda.device_count() >= 1 else [-1]
 print("gpu " + str(gpus))
-args.device = torch.device("cuda:" + str(args.gpus[0]) if args.gpus[0] >= 0 else "cpu")
 device = torch.device("cuda:" + str(gpus[0]) if gpus[0] >= 0 else "cpu")
 print("cuda:" + str(gpus[0]) if gpus[0] >= 0 else "cpu")
 tracking = defaul_pose_track or default_pose_flow or default_detector=='tracker'
 
+args = {}
+args.gpus=gpus
+args.device=device
 class DetectionLoader():
     def __init__(self, detector, cfg):
         self.cfg = cfg
