@@ -28,11 +28,13 @@ from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient,__
 
 app = Flask(__name__)
 demo = None
+default_config = "configs/halpe_26/resnet/256x192_res50_lr1e-3_1x.yaml"
+default_model = "pretrained_models/halpe26_fast_res50_256x192.pth"
 """----------------------------- Demo options -----------------------------"""
 parser = argparse.ArgumentParser(description='AlphaPose Single-Image Demo')
-parser.add_argument('--cfg', type=str, required=True,
+parser.add_argument('--cfg', type=str, default=default_config, required=False,
                     help='experiment configure file name')
-parser.add_argument('--checkpoint', type=str, required=True,
+parser.add_argument('--checkpoint', type=str, default=default_model, required=False,
                     help='checkpoint file name')
 parser.add_argument('--detector', dest='detector',
                     help='detector name', default="yolo")
