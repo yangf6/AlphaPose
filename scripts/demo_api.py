@@ -45,8 +45,6 @@ default_debug = False
 default_vis_fast = False
 default_pose_flow = False
 defaul_pose_track = False
-default_config = "configs/halpe_26/resnet/256x192_res50_lr1e-3_1x.yaml"
-default_model = "pretrained_models/halpe26_fast_res50_256x192.pth"
 
 
 cfg = update_config(default_config)
@@ -61,6 +59,19 @@ class args():
     def __init__(self, gpus, device):
         self.gpus=gpus
         self.device=device
+        self.inputimg = ""
+        self.save_image = False
+        self.vis = False
+        self.showbox = False
+        self.profile = False
+        self.format = None
+        self.min_box_area = 0
+        self.eval = False
+        self.flip = False
+        self.debug = False
+        self.vis_fast = False
+        self.pose_flow = False
+        self.pose_track = False
 
 args = args(gpus,device)
 class DetectionLoader():
@@ -166,8 +177,9 @@ class DetectionLoader():
 
 
 class DataWriter():
-    def __init__(self, cfg):
+    def __init__(self, cfg, opt):
         self.cfg = cfg
+        self.opt = opt
 
         self.eval_joints = list(range(cfg.DATA_PRESET.NUM_JOINTS))
         self.heatmap_to_coord = get_func_heatmap_to_coord(cfg)
@@ -242,9 +254,9 @@ class DataWriter():
         self.item = (boxes, scores, ids, hm_data, cropped_boxes, orig_img, im_name)
 
 class SingleImageAlphaPose():
-    def __init__(self, cfg):
+    def __init__(self, cfg, args):
         self.cfg = cfg
-
+        self.args = args
         # Load pose model
         self.pose_model = builder.build_sppe(cfg.MODEL, preset_cfg=cfg.DATA_PRESET)
 
@@ -261,7 +273,7 @@ class SingleImageAlphaPose():
 
     def process(self, im_name, image):
         # Init data writer
-        self.writer = DataWriter(self.cfg)
+        self.writer = DataWriter(self.cfg, self.args)
 
         runtime_profile = {
             'dt': [],
@@ -348,7 +360,7 @@ class SingleImageAlphaPose():
         print("Results have been written to json.")
 
 def load_model():
-    return SingleImageAlphaPose(cfg)
+    return SingleImageAlphaPose(cfg, args)
 
 def download_img(container_name, blob_name):
     try:
