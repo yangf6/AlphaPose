@@ -9,6 +9,7 @@ import numpy as np
 import torch
 from tqdm import tqdm
 import natsort
+import cv2
 
 from detector.apis import get_detector
 from trackers.tracker_api import Tracker
@@ -21,12 +22,18 @@ from alphapose.utils.transforms import flip, flip_heatmap
 from alphapose.utils.vis import getTime
 from alphapose.utils.webcam_detector import WebCamDetectionLoader
 from alphapose.utils.writer import DataWriter
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient,__version__
 
+app = Flask(__name__)
+
+default_config = "configs/halpe_26/resnet/256x192_res50_lr1e-3_1x.yaml"
+default_model = "pretrained_models/halpe26_fast_res50_256x192.pth"
 """----------------------------- Demo options -----------------------------"""
 parser = argparse.ArgumentParser(description='AlphaPose Demo')
-parser.add_argument('--cfg', type=str, required=True,
+parser.add_argument('--cfg', type=str, required=False,default=default_config,
                     help='experiment configure file name')
-parser.add_argument('--checkpoint', type=str, required=True,
+parser.add_argument('--checkpoint', type=str, required=False, default=default_model,
                     help='checkpoint file name')
 parser.add_argument('--sp', default=False, action='store_true',
                     help='Use single process for pytorch')
@@ -85,7 +92,7 @@ parser.add_argument('--pose_track', dest='pose_track',
 
 args = parser.parse_args()
 cfg = update_config(args.cfg)
-
+print(type(args))
 if platform.system() == 'Windows':
     args.sp = True
 
