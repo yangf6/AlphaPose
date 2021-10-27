@@ -246,6 +246,7 @@ class YOLODetector(BaseDetector):
         instead of coco %012d id for generalization. 
         """
         args = self.detector_opt
+        args.gpus = [-1]
         _CUDA = True
         if args:
             if args.gpus[0] < 0:
