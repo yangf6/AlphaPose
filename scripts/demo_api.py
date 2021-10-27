@@ -302,6 +302,7 @@ class SingleImageAlphaPose():
             print('===========================> Finish Model Running.')
         except Exception as e:
             print(repr(e))
+            print(e)
             print('An error as above occurs when processing the images, please check it')
             pass
         except KeyboardInterrupt:
