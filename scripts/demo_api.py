@@ -364,6 +364,7 @@ def download_img(container_name, blob_name):
 
 @app.route('/predict', methods=['POST'])
 def predit():
+    print("get called")
     input_img = request.get_json(silent=True)
     container_name = input_img['containerName']
     blob_name = input_img['blobName']
