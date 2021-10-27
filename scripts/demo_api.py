@@ -259,24 +259,31 @@ class SingleImageAlphaPose():
         try:
             start_time = getTime()
             with torch.no_grad():
+                print("262")
                 (inps, orig_img, im_name, boxes, scores, ids, cropped_boxes) = self.det_loader.process(im_name, image).read()
                 if orig_img is None:
                     raise Exception("no image is given")
                 if boxes is None or boxes.nelement() == 0:
+                    print("267")
                     if profile:
+                        print("269")
                         ckpt_time, det_time = getTime(start_time)
                         runtime_profile['dt'].append(det_time)
                     self.writer.save(None, None, None, None, None, orig_img, im_name)
                     if profile:
+                        print("274")
                         ckpt_time, pose_time = getTime(ckpt_time)
                         runtime_profile['pt'].append(pose_time)
                     pose = self.writer.start()
                     print("get called 270")
                     if profile:
+                        print("280")
                         ckpt_time, post_time = getTime(ckpt_time)
                         runtime_profile['pn'].append(post_time)
                 else:
+                    print("284")
                     if profile:
+                        print("286")
                         ckpt_time, det_time = getTime(start_time)
                         runtime_profile['dt'].append(det_time)
                     # Pose Estimation
