@@ -171,9 +171,11 @@ if __name__ == "__main__":
         det_loader = WebCamDetectionLoader(input_source, get_detector(args), cfg, args)
         det_worker = det_loader.start()
     elif mode == 'detfile':
+        print("filedection")
         det_loader = FileDetectionLoader(input_source, cfg, args)
         det_worker = det_loader.start()
     else:
+        print("detection")
         det_loader = DetectionLoader(input_source, get_detector(args), cfg, args, batchSize=args.detbatch, mode=mode, queueSize=args.qsize)
         det_worker = det_loader.start()
 
