@@ -350,5 +350,5 @@ def predit():
     # pose = demo.process(blob_name, image)
     return pose
 
-# demo = load_model()
+demo = load_model()
 
