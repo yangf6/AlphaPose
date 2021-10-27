@@ -80,6 +80,8 @@ parser.add_argument('--debug', default=False, action='store_true',
                     help='print detail information')
 parser.add_argument('--vis_fast', dest='vis_fast',
                     help='use fast rendering', action='store_true', default=False)
+parser.add_argument('--host')
+parser.add_argument('--port')
 """----------------------------- Tracking options -----------------------------"""
 parser.add_argument('--pose_flow', dest='pose_flow',
                     help='track humans in video with PoseFlow', action='store_true', default=False)
