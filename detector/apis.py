@@ -7,7 +7,7 @@
 from abc import ABC, abstractmethod
 
 
-def get_detector(opt=None):
+def get_detector(opt='None'):
     if opt.detector == 'yolo':
         from detector.yolo_api import YOLODetector
         from detector.yolo_cfg import cfg
@@ -21,7 +21,10 @@ def get_detector(opt=None):
         from detector.effdet_cfg import cfg
         return EffDetDetector(cfg, opt)
     else:
-        raise NotImplementedError
+        from detector.yolo_api import YOLODetector
+        from detector.yolo_cfg import cfg
+        return YOLODetector(cfg, opt)
+        #raise NotImplementedError
 
 
 class BaseDetector(ABC):

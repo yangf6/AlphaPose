@@ -30,56 +30,32 @@ app = Flask(__name__)
 demo = None
 default_config = "configs/halpe_26/resnet/256x192_res50_lr1e-3_1x.yaml"
 default_model = "pretrained_models/halpe26_fast_res50_256x192.pth"
-"""----------------------------- Demo options -----------------------------"""
-parser = argparse.ArgumentParser(description='AlphaPose Single-Image Demo')
-parser.add_argument('--cfg', type=str, default=default_config, required=False,
-                    help='experiment configure file name')
-parser.add_argument('--checkpoint', type=str, default=default_model, required=False,
-                    help='checkpoint file name')
-parser.add_argument('--detector', dest='detector',
-                    help='detector name', default="yolo")
-parser.add_argument('--image', dest='inputimg',
-                    help='image-name', default="")
-parser.add_argument('--save_img', default=False, action='store_true',
-                    help='save result as image')
-parser.add_argument('--vis', default=False, action='store_true',
-                    help='visualize image')
-parser.add_argument('--showbox', default=False, action='store_true',
-                    help='visualize human bbox')
-parser.add_argument('--profile', default=False, action='store_true',
-                    help='add speed profiling at screen output')
-parser.add_argument('--format', type=str,
-                    help='save in the format of cmu or coco or openpose, option: coco/cmu/open')
-parser.add_argument('--min_box_area', type=int, default=0,
-                    help='min box area to filter out')
-parser.add_argument('--eval', dest='eval', default=False, action='store_true',
-                    help='save the result json as coco format, using image index(int) instead of image name(str)')
-parser.add_argument('--gpus', type=str, dest='gpus', default="0",
-                    help='choose which cuda device to use by index and input comma to use multi gpus, e.g. 0,1,2,3. (input -1 for cpu only)')
-parser.add_argument('--flip', default=False, action='store_true',
-                    help='enable flip testing')
-parser.add_argument('--debug', default=False, action='store_true',
-                    help='print detail information')
-parser.add_argument('--vis_fast', dest='vis_fast',
-                    help='use fast rendering', action='store_true', default=False)
-"""----------------------------- Tracking options -----------------------------"""
-parser.add_argument('--pose_flow', dest='pose_flow',
-                    help='track humans in video with PoseFlow', action='store_true', default=False)
-parser.add_argument('--pose_track', dest='pose_track',
-                    help='track humans in video with reid', action='store_true', default=False)
+default_detector = "yolo"
+default_inputimg = ""
+save_image = False
+vis = False
+showbox = False
+profile = False
+default_format = None
+default_min_box_area = 0
+default_eval = False
+defaul_gpus = 0
+default_flip = False
+default_debug = False
+default_vis_fast = False
+default_pose_flow = False
+defaul_pose_track = False
 
-args = parser.parse_args()
-cfg = update_config(args.cfg)
+cfg = update_config(default_config)
 
-args.gpus = [int(args.gpus[0])] if torch.cuda.device_count() >= 1 else [-1]
-args.device = torch.device("cuda:" + str(args.gpus[0]) if args.gpus[0] >= 0 else "cpu")
-args.tracking = args.pose_track or args.pose_flow or args.detector=='tracker'
+gpus = [int(defaul_gpus)] if torch.cuda.device_count() >= 1 else [-1]
+device = torch.device("cuda:" + str(defaul_gpus) if defaul_gpus >= 0 else "cpu")
+tracking = defaul_pose_track or default_pose_flow or default_detector=='tracker'
 
 class DetectionLoader():
-    def __init__(self, detector, cfg, opt):
+    def __init__(self, detector, cfg):
         self.cfg = cfg
-        self.opt = opt
-        self.device = opt.device
+        self.device = device
         self.detector = detector
 
         self._input_size = cfg.DATA_PRESET.IMAGE_SIZE
@@ -175,9 +151,8 @@ class DetectionLoader():
 
 
 class DataWriter():
-    def __init__(self, cfg, opt):
+    def __init__(self, cfg):
         self.cfg = cfg
-        self.opt = opt
 
         self.eval_joints = list(range(cfg.DATA_PRESET.NUM_JOINTS))
         self.heatmap_to_coord = get_func_heatmap_to_coord(cfg)
@@ -252,25 +227,24 @@ class DataWriter():
         self.item = (boxes, scores, ids, hm_data, cropped_boxes, orig_img, im_name)
 
 class SingleImageAlphaPose():
-    def __init__(self, args, cfg):
-        self.args = args
+    def __init__(self, cfg):
         self.cfg = cfg
 
         # Load pose model
         self.pose_model = builder.build_sppe(cfg.MODEL, preset_cfg=cfg.DATA_PRESET)
 
-        print(f'Loading pose model from {args.checkpoint}...')
-        self.pose_model.load_state_dict(torch.load(args.checkpoint, map_location=args.device))
+        print(f'Loading pose model from {default_model}...')
+        self.pose_model.load_state_dict(torch.load(default_model, map_location=device))
         self.pose_dataset = builder.retrieve_dataset(cfg.DATASET.TRAIN)
 
-        self.pose_model.to(args.device)
+        self.pose_model.to(device)
         self.pose_model.eval()
         
-        self.det_loader = DetectionLoader(get_detector(self.args), self.cfg, self.args)
+        self.det_loader = DetectionLoader(get_detector(), self.cfg)
 
     def process(self, im_name, image):
         # Init data writer
-        self.writer = DataWriter(self.cfg, self.args)
+        self.writer = DataWriter(self.cfg)
 
         runtime_profile = {
             'dt': [],
@@ -285,40 +259,40 @@ class SingleImageAlphaPose():
                 if orig_img is None:
                     raise Exception("no image is given")
                 if boxes is None or boxes.nelement() == 0:
-                    if self.args.profile:
+                    if profile:
                         ckpt_time, det_time = getTime(start_time)
                         runtime_profile['dt'].append(det_time)
                     self.writer.save(None, None, None, None, None, orig_img, im_name)
-                    if self.args.profile:
+                    if profile:
                         ckpt_time, pose_time = getTime(ckpt_time)
                         runtime_profile['pt'].append(pose_time)
                     pose = self.writer.start()
-                    if self.args.profile:
+                    if profile:
                         ckpt_time, post_time = getTime(ckpt_time)
                         runtime_profile['pn'].append(post_time)
                 else:
-                    if self.args.profile:
+                    if profile:
                         ckpt_time, det_time = getTime(start_time)
                         runtime_profile['dt'].append(det_time)
                     # Pose Estimation
-                    inps = inps.to(self.args.device)
-                    if self.args.flip:
+                    inps = inps.to(device)
+                    if default_flip:
                         inps = torch.cat((inps, flip(inps)))
                     hm = self.pose_model(inps)
-                    if self.args.flip:
+                    if default_flip:
                         hm_flip = flip_heatmap(hm[int(len(hm) / 2):], self.pose_dataset.joint_pairs, shift=True)
                         hm = (hm[0:int(len(hm) / 2)] + hm_flip) / 2
-                    if self.args.profile:
+                    if profile:
                         ckpt_time, pose_time = getTime(ckpt_time)
                         runtime_profile['pt'].append(pose_time)
                     hm = hm.cpu()
                     self.writer.save(boxes, scores, ids, hm, cropped_boxes, orig_img, im_name)
                     pose = self.writer.start()
-                    if self.args.profile:
+                    if profile:
                         ckpt_time, post_time = getTime(ckpt_time)
                         runtime_profile['pn'].append(post_time)
 
-            if self.args.profile:
+            if profile:
                 print(
                     'det time: {dt:.4f} | pose time: {pt:.4f} | post processing: {pn:.4f}'.format(
                         dt=np.mean(runtime_profile['dt']), pt=np.mean(runtime_profile['pt']), pn=np.mean(runtime_profile['pn']))
@@ -347,7 +321,7 @@ class SingleImageAlphaPose():
         print("Results have been written to json.")
 
 def load_model():
-    return SingleImageAlphaPose(args, cfg)
+    return SingleImageAlphaPose(cfg)
 
 def download_img(container_name, blob_name):
     try:
