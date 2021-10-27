@@ -93,7 +93,7 @@ class YOLODetector(BaseDetector):
         if not self.model:
             self.load_model()
         with torch.no_grad():
-            imgs = imgs.to(args.device) if args else imgs.cuda()
+            imgs = imgs.to('cpu') if args else imgs.cuda()
             prediction = self.model(imgs, args=args) 
             #do nms to the detection results, only human category is left
             dets = self.dynamic_write_results(prediction, self.confidence, 
@@ -263,7 +263,7 @@ class YOLODetector(BaseDetector):
         img, orig_img, img_dim_list = prep_image(img_name, self.inp_dim)
         with torch.no_grad():
             img_dim_list = torch.FloatTensor([img_dim_list]).repeat(1, 2)
-            img = img.to(args.device) if args else img.cuda()
+            img = img.to('cpu') if args else img.cuda()
             prediction = self.model(img, args=args)
             #do nms to the detection results, only human category is left
             dets = self.dynamic_write_results(prediction, self.confidence,
