@@ -357,11 +357,8 @@ def predit():
         # im_name = args.inputimg    # the path to the target image
         # cv2.imread(im_name)
         img_content = img.readall()
-        print(type(img_content))
-        arr = blob_to_array(img_content)
-        print(type(arr))
-        print(arr)
-        image = cv2.cvtColor(np.array(img_content), cv2.COLOR_BGR2RGB)
+        cv2_img = cv2.imread(img_content)
+        image = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2RGB)
         pose = demo.process(blob_name, image)
         return str(pose)
     except Exception as err:
