@@ -360,9 +360,8 @@ def predit():
         print(type(arr))
         print(arr)
         image = cv2.cvtColor(arr, cv2.COLOR_BGR2RGB)
-        # pose = demo.process(blob_name, image)
-        # return pose
-        return "it works"
+        pose = demo.process(blob_name, image)
+        return pose
     except Exception as err:
         print(err)
         return 'unable to process img'
