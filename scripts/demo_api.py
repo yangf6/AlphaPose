@@ -353,7 +353,7 @@ def predit():
     img = download_img(container_name, blob_name)
     # im_name = args.inputimg    # the path to the target image
     # cv2.imread(im_name)
-    arr = blob_to_array(img)
+    arr = blob_to_array(img.readall())
     image = cv2.cvtColor(arr, cv2.COLOR_BGR2RGB)
     pose = demo.process(blob_name, image)
     return pose
