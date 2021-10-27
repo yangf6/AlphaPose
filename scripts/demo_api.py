@@ -39,7 +39,7 @@ profile = False
 default_format = None
 default_min_box_area = 0
 default_eval = False
-defaul_gpus = 0
+defaul_gpus = "0"
 default_flip = False
 default_debug = False
 default_vis_fast = False
@@ -48,8 +48,8 @@ defaul_pose_track = False
 
 cfg = update_config(default_config)
 
-gpus = [int(defaul_gpus)] if torch.cuda.device_count() >= 1 else [-1]
-device = torch.device("cuda:" + str(gpus) if gpus >= 0 else "cpu")
+gpus = [int(i) for i in defaul_gpus.split(',')] if torch.cuda.device_count() >= 1 else [-1]
+device = torch.device("cuda:" + str(gpus[0]) if gpus[0] >= 0 else "cpu")
 tracking = defaul_pose_track or default_pose_flow or default_detector=='tracker'
 
 class DetectionLoader():
