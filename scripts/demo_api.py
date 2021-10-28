@@ -25,7 +25,7 @@ from detector.apis import get_detector
 from alphapose.utils.vis import getTime
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient,__version__
-
+import json
 app = Flask(__name__)
 
 default_config = "configs/halpe_26/resnet/256x192_res50_lr1e-3_1x.yaml"
@@ -398,7 +398,8 @@ def predit():
         cv2_img = cv2.imdecode(x, cv2.IMREAD_UNCHANGED)
         image = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2RGB)
         pose = demo.process(blob_name, image)
-        return json.dump(pose)
+        print(type(pose))
+        return json.dumps(pose)
     except Exception as err:
         print(err)
         return 'unable to process img'
