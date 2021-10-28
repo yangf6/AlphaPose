@@ -398,7 +398,7 @@ def predit():
         cv2_img = cv2.imdecode(x, cv2.IMREAD_UNCHANGED)
         image = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2RGB)
         pose = demo.process(blob_name, image)
-        return str(pose)
+        return json.dump(pose)
     except Exception as err:
         print(err)
         return 'unable to process img'
