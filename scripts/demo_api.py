@@ -356,9 +356,9 @@ class SingleImageAlphaPose():
         return image
 
     def writeJson(self, final_result, outputpath, form='coco', for_eval=False):
-        from alphapose.utils.pPose_nms import write_json
-        write_json(final_result, outputpath, form=form, for_eval=for_eval)
         print("Results have been written to json.")
+        from alphapose.utils.pPose_nms import write_json
+        return write_json(final_result, outputpath, form=form, for_eval=for_eval)
 
 def load_model():
     return SingleImageAlphaPose(cfg, args)
