@@ -400,6 +400,7 @@ def predit():
         pose = demo.process(blob_name, image)
         return str(pose)
     except Exception as err:
+        print('err')
         print(err)
         return 'unable to process img'
 
