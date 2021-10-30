@@ -555,24 +555,24 @@ def write_json(all_results, outputpath, form=None, for_eval=False):
                 json_results_cmu[result['image_id']]['people'].append(tmp)
             else:
                 json_results.append(result)
-
-    if form == 'cmu': # the form of CMU-Pose
-        with open(os.path.join(outputpath,'alphapose-results.json'), 'w') as json_file:
-            json_file.write(json.dumps(json_results_cmu))
-            if not os.path.exists(os.path.join(outputpath,'sep-json')):
-                os.mkdir(os.path.join(outputpath,'sep-json'))
-            for name in json_results_cmu.keys():
-                with open(os.path.join(outputpath,'sep-json',name.split('.')[0]+'.json'),'w') as json_file:
-                    json_file.write(json.dumps(json_results_cmu[name]))
-    elif form == 'open': # the form of OpenPose
-        with open(os.path.join(outputpath,'alphapose-results.json'), 'w') as json_file:
-            json_file.write(json.dumps(json_results_cmu))
-            if not os.path.exists(os.path.join(outputpath,'sep-json')):
-                os.mkdir(os.path.join(outputpath,'sep-json'))
-            for name in json_results_cmu.keys():
-                with open(os.path.join(outputpath,'sep-json',name.split('.')[0]+'.json'),'w') as json_file:
-                    json_file.write(json.dumps(json_results_cmu[name]))
-    else:
-        with open(os.path.join(outputpath,'alphapose-results.json'), 'w') as json_file:
-            json_file.write(json.dumps(json_results))
+    return json_results
+    # if form == 'cmu': # the form of CMU-Pose
+    #     with open(os.path.join(outputpath,'alphapose-results.json'), 'w') as json_file:
+    #         json_file.write(json.dumps(json_results_cmu))
+    #         if not os.path.exists(os.path.join(outputpath,'sep-json')):
+    #             os.mkdir(os.path.join(outputpath,'sep-json'))
+    #         for name in json_results_cmu.keys():
+    #             with open(os.path.join(outputpath,'sep-json',name.split('.')[0]+'.json'),'w') as json_file:
+    #                 json_file.write(json.dumps(json_results_cmu[name]))
+    # elif form == 'open': # the form of OpenPose
+    #     with open(os.path.join(outputpath,'alphapose-results.json'), 'w') as json_file:
+    #         json_file.write(json.dumps(json_results_cmu))
+    #         if not os.path.exists(os.path.join(outputpath,'sep-json')):
+    #             os.mkdir(os.path.join(outputpath,'sep-json'))
+    #         for name in json_results_cmu.keys():
+    #             with open(os.path.join(outputpath,'sep-json',name.split('.')[0]+'.json'),'w') as json_file:
+    #                 json_file.write(json.dumps(json_results_cmu[name]))
+    # else:
+    #     with open(os.path.join(outputpath,'alphapose-results.json'), 'w') as json_file:
+    #         json_file.write(json.dumps(json_results))
 

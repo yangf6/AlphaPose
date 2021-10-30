@@ -344,7 +344,8 @@ class SingleImageAlphaPose():
         except KeyboardInterrupt:
             print('===========================> Finish Model Running.')
         print("get called 309")
-        return pose
+        result = [pose]
+        return demo.writeJson(result, "", form=args.format, for_eval=args.eval)
 
     def getImg(self):
         return self.writer.orig_img
