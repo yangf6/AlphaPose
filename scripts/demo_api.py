@@ -387,10 +387,12 @@ def blob_to_array(blob):
 @app.route('/predict', methods=['POST'])
 def predit():
     print("get called")
+    default_value = {"image_id": "", "category_id": 1, "keypoints": [], "score": 0, "idx": [0.0]}
     try:
         input_img = request.get_json(silent=True)
         container_name = input_img['containerName']
         blob_name = input_img['blobName']
+        default_value["image_id"] = blob_name
         print(container_name + "  " + blob_name)
         img = download_img(container_name, blob_name)
         # im_name = args.inputimg    # the path to the target image
@@ -404,7 +406,7 @@ def predit():
     except Exception as err:
         print('err')
         print(err)
-        return 'unable to process img'
+        return str(blob_name)
 
 
 
