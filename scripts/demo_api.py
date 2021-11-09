@@ -406,7 +406,7 @@ def predit():
     except Exception as err:
         print('err')
         print(err)
-        return str(blob_name)
+        return str(default_value)
 
 
 
