@@ -18,8 +18,8 @@ from ..transforms import (addDPG, affine_transform, flip_joints_3d,
 # Only windows visual studio 2013 ~2017 support compile c/cuda extensions
 # If you force to compile extension on Windows and ensure appropriate visual studio
 # is intalled, you can try to use these ext_modules.
-if platform.system() != 'Windows':
-    from ..roi_align import RoIAlign
+# if platform.system() != 'Windows':
+#     from ..roi_align import RoIAlign
 
 
 class SimpleTransform(object):
