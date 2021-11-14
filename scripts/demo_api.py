@@ -242,7 +242,8 @@ class DataWriter():
             }
 
             if hm_data.size()[1] == 49:
-                from alphapose.utils.vis import vis_frame_dense as vis_frame
+                raise Exception("error!")
+                # from alphapose.utils.vis import vis_frame_dense as vis_frame
             elif self.opt.vis_fast:
                 from alphapose.utils.vis import vis_frame_fast as vis_frame
             else:
