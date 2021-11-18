@@ -8,10 +8,9 @@ from abc import ABC, abstractmethod
 
 
 def get_detector(opt='None'):
-    print("get 11")
     from detector.yolo_api import YOLODetector
+    print("get 12")
     from detector.yolo_cfg import cfg
-    print("get 14")
     return YOLODetector(cfg, opt)
 
 
