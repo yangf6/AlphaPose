@@ -99,7 +99,6 @@ class DetectionLoader():
         self.pose = (None, None, None, None, None, None, None)
 
     def process(self, im_name, image):
-        print("102")
         # start to pre process images for object detection
         self.image_preprocess(im_name, image)
         print('image_preprocess')
