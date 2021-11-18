@@ -26,7 +26,7 @@ from detector.apis import BaseDetector
 # if platform.system() != 'Windows':
 #     from detector.nms import nms_wrapper
 
-
+print("get here 29")
 class YOLODetector(BaseDetector):
     def __init__(self, cfg, opt=None):
         super(YOLODetector, self).__init__()
