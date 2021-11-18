@@ -77,6 +77,7 @@ class args():
 args = args(gpus,device)
 class DetectionLoader():
     def __init__(self, detector, cfg):
+        print("get 88")
         self.cfg = cfg
         self.device = device
         self.detector = detector
@@ -85,7 +86,6 @@ class DetectionLoader():
         self._output_size = cfg.DATA_PRESET.HEATMAP_SIZE
 
         self._sigma = cfg.DATA_PRESET.SIGMA
-        print("get 88")
         pose_dataset = builder.retrieve_dataset(self.cfg.DATASET.TRAIN)
         if cfg.DATA_PRESET.TYPE == 'simple':
             self.transformation = SimpleTransform(
