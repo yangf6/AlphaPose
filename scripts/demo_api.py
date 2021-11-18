@@ -268,8 +268,8 @@ class SingleImageAlphaPose():
         if len(gpus) > 1 and gpus[0] >= 1:
             self.pose_model = torch.nn.DataParallel(self.pose_model, device_ids=gpus).to(device)
         else:
-            print("get there to cpu")
             self.pose_model.to(device)
+        print("get there 272")
         self.pose_model.eval()
         self.det_loader = DetectionLoader(get_detector(args), self.cfg)
 

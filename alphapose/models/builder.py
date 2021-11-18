@@ -47,5 +47,4 @@ def retrieve_dataset(cfg):
         exec(f'from ..datasets import {cfg.TYPE}')
     except Exception as err:
         print(err)
-    print("get there")
     return retrieve_from_cfg(cfg, DATASET)
