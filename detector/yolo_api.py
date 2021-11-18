@@ -23,10 +23,10 @@ from detector.apis import BaseDetector
 #only windows visual studio 2013 ~2017 support compile c/cuda extensions
 #If you force to compile extension on Windows and ensure appropriate visual studio
 #is intalled, you can try to use these ext_modules.
-if platform.system() != 'Windows':
-    from detector.nms import nms_wrapper
+# if platform.system() != 'Windows':
+#     from detector.nms import nms_wrapper
 
-print("get here 29")
+# print("get here 29")
 class YOLODetector(BaseDetector):
     def __init__(self, cfg, opt=None):
         super(YOLODetector, self).__init__()
@@ -191,29 +191,29 @@ class YOLODetector(BaseDetector):
 
                 #if nms has to be done
                 if nms:
-                    if platform.system() != 'Windows':
-                        #We use faster rcnn implementation of nms (soft nms is optional)
-                        nms_op = getattr(nms_wrapper, 'nms')
-                        #nms_op input:(n,(x1,y1,x2,y2,c))
-                        #nms_op output: input[inds,:], inds
-                        _, inds = nms_op(image_pred_class[:,:5], nms_conf)
+                    # if platform.system() != 'Windows':
+                    #     #We use faster rcnn implementation of nms (soft nms is optional)
+                    #     nms_op = getattr(nms_wrapper, 'nms')
+                    #     #nms_op input:(n,(x1,y1,x2,y2,c))
+                    #     #nms_op output: input[inds,:], inds
+                    #     _, inds = nms_op(image_pred_class[:,:5], nms_conf)
 
-                        image_pred_class = image_pred_class[inds]
-                    else:
-                        # Perform non-maximum suppression
-                        max_detections = []
-                        while image_pred_class.size(0):
-                            # Get detection with highest confidence and save as max detection
-                            max_detections.append(image_pred_class[0].unsqueeze(0))
-                            # Stop if we're at the last detection
-                            if len(image_pred_class) == 1:
-                                break
-                            # Get the IOUs for all boxes with lower confidence
-                            ious = bbox_iou(max_detections[-1], image_pred_class[1:], args)
-                            # Remove detections with IoU >= NMS threshold
-                            image_pred_class = image_pred_class[1:][ious < nms_conf]
+                    #     image_pred_class = image_pred_class[inds]
+                    # else:
+                    # Perform non-maximum suppression
+                    max_detections = []
+                    while image_pred_class.size(0):
+                        # Get detection with highest confidence and save as max detection
+                        max_detections.append(image_pred_class[0].unsqueeze(0))
+                        # Stop if we're at the last detection
+                        if len(image_pred_class) == 1:
+                            break
+                        # Get the IOUs for all boxes with lower confidence
+                        ious = bbox_iou(max_detections[-1], image_pred_class[1:], args)
+                        # Remove detections with IoU >= NMS threshold
+                        image_pred_class = image_pred_class[1:][ious < nms_conf]
 
-                        image_pred_class = torch.cat(max_detections).data
+                    image_pred_class = torch.cat(max_detections).data
 
                 #Concatenate the batch_id of the image to the detection
                 #this helps us identify which image does the detection correspond to 
