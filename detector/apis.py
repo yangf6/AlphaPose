@@ -9,7 +9,6 @@ from abc import ABC, abstractmethod
 
 def get_detector(opt='None'):
     from detector.yolo_api import YOLODetector
-    print("get 12")
     from detector.yolo_cfg import cfg
     return YOLODetector(cfg, opt)
 
