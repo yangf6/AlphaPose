@@ -42,6 +42,6 @@ def build_dataset(cfg, preset_cfg, **kwargs):
 
 
 def retrieve_dataset(cfg):
-    from .datasets import Halpe_26  
+    from ..datasets import Halpe_26  
     # exec(f'from ..datasets import {cfg.TYPE}')
     return retrieve_from_cfg(cfg, DATASET)
