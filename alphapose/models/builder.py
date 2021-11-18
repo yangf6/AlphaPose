@@ -42,7 +42,7 @@ def build_dataset(cfg, preset_cfg, **kwargs):
 
 
 def retrieve_dataset(cfg):
-    print("get 45")
+    print(cfg.TYPE)
+    print("get 46")
     exec(f'from ..datasets import {cfg.TYPE}')
-    print("get 47")
     return retrieve_from_cfg(cfg, DATASET)
