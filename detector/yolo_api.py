@@ -29,7 +29,6 @@ if platform.system() != 'Windows':
 
 class YOLODetector(BaseDetector):
     def __init__(self, cfg, opt=None):
-        print("get 32")
         super(YOLODetector, self).__init__()
 
         self.detector_cfg = cfg
