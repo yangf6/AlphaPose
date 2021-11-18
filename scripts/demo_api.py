@@ -269,8 +269,8 @@ class SingleImageAlphaPose():
             self.pose_model = torch.nn.DataParallel(self.pose_model, device_ids=gpus).to(device)
         else:
             self.pose_model.to(device)
-        print("get there 272")
         self.pose_model.eval()
+        print("get there 273")
         self.det_loader = DetectionLoader(get_detector(args), self.cfg)
 
     def process(self, im_name, image):
