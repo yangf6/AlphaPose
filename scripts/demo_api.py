@@ -270,6 +270,7 @@ class SingleImageAlphaPose():
             self.pose_model.to(device)
         self.pose_model.eval()
         self.det_loader = DetectionLoader(get_detector(args), self.cfg)
+        print(type(self.det_loader))
 
 
     def process(self, im_name, image):
