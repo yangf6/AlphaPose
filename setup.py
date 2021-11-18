@@ -132,28 +132,28 @@ def get_ext_modules():
                 name='nms_cpu',
                 module='detector.nms',
                 sources=['src/nms_cpu.cpp']),
-            # make_cuda_ext(
-            #     name='nms_cuda',
-            #     module='detector.nms',
-            #     sources=['src/nms_cuda.cpp', 'src/nms_kernel.cu']),
-            # make_cuda_ext(
-            #     name='roi_align_cuda',
-            #     module='alphapose.utils.roi_align',
-            #     sources=['src/roi_align_cuda.cpp', 'src/roi_align_kernel.cu']),
-            # make_cuda_ext(
-            #     name='deform_conv_cuda',
-            #     module='alphapose.models.layers.dcn',
-            #     sources=[
-            #         'src/deform_conv_cuda.cpp',
-            #         'src/deform_conv_cuda_kernel.cu'
-            #     ]),
-            # make_cuda_ext(
-            #     name='deform_pool_cuda',
-            #     module='alphapose.models.layers.dcn',
-            #     sources=[
-            #         'src/deform_pool_cuda.cpp',
-            #         'src/deform_pool_cuda_kernel.cu'
-            #     ]),
+            make_cuda_ext(
+                name='nms_cuda',
+                module='detector.nms',
+                sources=['src/nms_cuda.cpp', 'src/nms_kernel.cu']),
+            make_cuda_ext(
+                name='roi_align_cuda',
+                module='alphapose.utils.roi_align',
+                sources=['src/roi_align_cuda.cpp', 'src/roi_align_kernel.cu']),
+            make_cuda_ext(
+                name='deform_conv_cuda',
+                module='alphapose.models.layers.dcn',
+                sources=[
+                    'src/deform_conv_cuda.cpp',
+                    'src/deform_conv_cuda_kernel.cu'
+                ]),
+            make_cuda_ext(
+                name='deform_pool_cuda',
+                module='alphapose.models.layers.dcn',
+                sources=[
+                    'src/deform_pool_cuda.cpp',
+                    'src/deform_pool_cuda_kernel.cu'
+                ]),
         ]
     return ext_modules
 
@@ -208,7 +208,7 @@ if __name__ == '__main__':
         setup_requires=['pytest-runner', 'numpy', 'cython'],
         tests_require=['pytest'],
         install_requires=get_install_requires(),
-        ext_modules=get_ext_modules(),
+        # ext_modules=get_ext_modules(),
         cmdclass={'build_ext': BuildExtension},
         zip_safe=False)
     # Windows need pycocotools here: https://github.com/philferriere/cocoapi#subdirectory=PythonAPI
