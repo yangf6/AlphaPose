@@ -76,10 +76,10 @@ class SimpleTransform(object):
 
             self.upper_body_ids = dataset.upper_body_ids
             self.lower_body_ids = dataset.lower_body_ids
-        if platform.system() != 'Windows':
-            self.roi_align = RoIAlign(self._input_size, sample_num=-1)
-            if gpu_device is not None:
-                self.roi_align = self.roi_align.to(gpu_device)
+        # if platform.system() != 'Windows':
+        #     self.roi_align = RoIAlign(self._input_size, sample_num=-1)
+        #     if gpu_device is not None:
+        #         self.roi_align = self.roi_align.to(gpu_device)
 
     def test_transform(self, src, bbox):
         xmin, ymin, xmax, ymax = bbox
