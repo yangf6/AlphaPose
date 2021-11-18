@@ -85,7 +85,7 @@ class DetectionLoader():
         self._output_size = cfg.DATA_PRESET.HEATMAP_SIZE
 
         self._sigma = cfg.DATA_PRESET.SIGMA
-
+        print("get 88")
         pose_dataset = builder.retrieve_dataset(self.cfg.DATASET.TRAIN)
         if cfg.DATA_PRESET.TYPE == 'simple':
             self.transformation = SimpleTransform(
@@ -271,7 +271,6 @@ class SingleImageAlphaPose():
             self.pose_model.to(device)
         self.pose_model.eval()
         self.det_loader = DetectionLoader(get_detector(args), self.cfg)
-        print("get there 273")
 
 
     def process(self, im_name, image):
