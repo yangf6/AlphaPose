@@ -264,9 +264,7 @@ class SingleImageAlphaPose():
 
         print(f'Loading pose model from {default_model}...')
         self.pose_model.load_state_dict(torch.load(default_model, map_location=device))
-        print("get there 267")
         self.pose_dataset = builder.retrieve_dataset(cfg.DATASET.TRAIN)
-        print("get there 269")
         if len(gpus) > 1 and gpus[0] >= 1:
             self.pose_model = torch.nn.DataParallel(self.pose_model, device_ids=gpus).to(device)
         else:
