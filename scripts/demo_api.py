@@ -270,8 +270,9 @@ class SingleImageAlphaPose():
         else:
             self.pose_model.to(device)
         self.pose_model.eval()
-        print("get there 273")
         self.det_loader = DetectionLoader(get_detector(args), self.cfg)
+        print("get there 273")
+
 
     def process(self, im_name, image):
         # Init data writer
