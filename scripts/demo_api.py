@@ -77,7 +77,6 @@ class args():
 args = args(gpus,device)
 class DetectionLoader():
     def __init__(self, detector, cfg):
-        print("get 88")
         self.cfg = cfg
         self.device = device
         self.detector = detector
