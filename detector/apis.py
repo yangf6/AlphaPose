@@ -11,9 +11,10 @@ def get_detector(opt='None'):
     try:
         from detector.yolo_api import YOLODetector
         from detector.yolo_cfg import cfg
+        return YOLODetector(cfg, opt)
     except Exception as err:
         print(err)
-    return YOLODetector(cfg, opt)
+    
 
 
 class BaseDetector(ABC):
